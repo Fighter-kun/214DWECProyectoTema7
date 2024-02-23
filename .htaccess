@@ -1,0 +1,5 @@
+Options -Indexes
+DirectoryIndex indexProyectoTema7.html index.php index.html
+ErrorDocument 403 /214DWECProyectoTema7/errors/403.html
+ErrorDocument 404 /214DWECProyectoTema7/errors/404.html
+Redirect 301 /google https://www.google.es

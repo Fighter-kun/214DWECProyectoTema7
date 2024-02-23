@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--
+        Descripción: CodigoEjercicio7.1.2
+        Autor: Carlos García Cachón
+        Fecha de creación/modificación: 22/01/2024
+-->
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="Carlos García Cachón" />
+        <meta name="description" content="CodigoEjercicio7.2" />
+        <meta name="keywords" content="CodigoEjercicio, 7.2" />
+        <meta name="generator" content="Apache NetBeans IDE 19" />
+        <meta name="generator" content="60" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Carlos García Cachón</title>
+        <link rel="icon" type="image/jpg" href="../webroot/media/images/favicon.ico" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+        <link rel="stylesheet" href="../webroot/css/style.css" />
+    </head>
+
+    <body>
+        <header class="text-center">
+            <h1>
+                2. Crea una aplicación web con un botón “Cargar catálogo” y un desplegable. Cuando pulsemos al botón se cargará
+                una tabla con información extraída de un documento xml que se encuentra en el servidor. El documento contiene
+                información sobre discos. Inicialmente aparecerá una tabla con dos columnas “Título” y “Artista”. El desplegable
+                contendrá cuatro valores: País, Discográfica, País y Año. Cuando seleccionamos uno de ellos, añadiremos una
+                columna a nuestra tabla con la información correspondiente.
+            </h1>
+        </header>
+        <main>
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col text-center">
+                        <button id="cargarCatalogo">Cargar catálogo</button>
+                        <select id="filtro">
+                            <option value="titulo_artista">Título y Artista</option>
+                            <option value="pais">País</option>
+                            <option value="discografica">Discográfica</option>
+                            <option value="pais_ano">País y Año</option>
+                        </select>
+                        <table id="tablaCatalogo">
+                            <!-- La tabla se llenará dinámicamente con JavaScript -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <script>
+                let xmlDoc; // Variable global para almacenar el documento XML
+                document.getElementById("cargarCatalogo").addEventListener("click", cargarCatalogo);
+
+                function cargarCatalogo() {
+                    // Lógica para cargar el catálogo desde el documento XML en el servidor
+                    fetch("http://daw214.isauces.local/214DWECProyectoTema7/tmp/catalogo.xml")
+                            .then((response) => response.text())
+                            .then((data) => {
+                                xmlDoc = new DOMParser().parseFromString(data, "text/xml");
+                                procesarCatalogo();
+                            });
+                }
+
+                function procesarCatalogo() {
+                    const discos = xmlDoc.getElementsByTagName("CD");
+                    const tabla = document.getElementById("tablaCatalogo");
+
+                    // Crear encabezados iniciales
+                    const encabezado = tabla.createTHead();
+                    const filaEncabezado = encabezado.insertRow();
+                    filaEncabezado.insertCell(0).textContent = "Título";
+                    filaEncabezado.insertCell(1).textContent = "Artista";
+
+                    // Llenar la tabla con datos iniciales (Título y Artista)
+                    for (const disco of discos) {
+                        const fila = tabla.insertRow();
+                        fila.insertCell(0).textContent =
+                                disco.getElementsByTagName("TITLE")[0].textContent;
+                        fila.insertCell(1).textContent =
+                                disco.getElementsByTagName("ARTIST")[0].textContent;
+                    }
+                }
+
+                // Agregar listener para el cambio en el desplegable
+                document.getElementById("filtro").addEventListener("change", agregarColumna);
+
+                function agregarColumna() {
+                    if (!xmlDoc) {
+                        console.error("Error: xmlDoc no ha sido inicializado.");
+                        return;
+                    }
+
+                    const filtroSeleccionado = document.getElementById("filtro").value;
+
+                    // Verificar la opción seleccionada y agregar la columna correspondiente
+                    switch (filtroSeleccionado) {
+                        case "pais":
+                            agregarColumnaDesdeXML("COUNTRY", "País");
+                            break;
+                        case "discografica":
+                            agregarColumnaDesdeXML("COMPANY", "Discográfica");
+                            break;
+                        case "pais_ano":
+                            agregarColumnaDesdeXML("YEAR", "Año");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                function agregarColumnaDesdeXML(tag, nombreColumna) {
+                    const tabla = document.getElementById("tablaCatalogo");
+
+                    if (!tabla) {
+                        console.error("Error: No se puede encontrar la tablaCatalogo.");
+                        return;
+                    }
+
+                    const encabezado = tabla.tHead;
+                    const filas = tabla.rows;
+
+                    // Verificar si la columna ya existe
+                    let columnasExistentes = new Set(Array.from(encabezado.rows[0].cells).map(cell => cell.textContent));
+
+                    if (!columnasExistentes.has(nombreColumna)) {
+                        // Si no existe, agregar la nueva columna al encabezado
+                        const nuevaColumna = encabezado.rows[0].insertCell(-1);
+                        nuevaColumna.textContent = nombreColumna;
+
+                        // Marcar la columna como existente para evitar repeticiones
+                        columnasExistentes.add(nombreColumna);
+
+                        // Llenar la columna existente con datos desde el XML
+                        const discos = xmlDoc.getElementsByTagName("CD");
+                        for (let i = 0; i < discos.length; i++) {
+                            // Crear una nueva fila si aún no existe para esta posición
+                            let fila = filas[i + 1];
+                            if (!fila) {
+                                fila = tabla.insertRow();
+                            }
+
+                            const valor = discos[i].getElementsByTagName(tag)[0].textContent;
+
+                            // Verificar si la celda ya existe en la fila actual
+                            let celdaExistente = fila.cells[columnasExistentes.size - 1];
+
+                            if (!celdaExistente) {
+                                // Si no existe, agregar una nueva celda a la fila
+                                celdaExistente = fila.insertCell(-1);
+                            }
+
+                            // Actualizar el contenido de la celda
+                            celdaExistente.textContent = valor;
+                        }
+
+                        console.log(`Columna ${nombreColumna} agregada correctamente.`);
+                    } else {
+                        console.log(`Columna ${nombreColumna} ya existe en la tabla.`);
+                    }
+                }
+
+
+            </script>
+        </main>
+        <footer class="position-fixed bottom-0 end-0">
+            <div class="row text-center">
+                <div class="footer-item">
+                    <address>
+                        ©
+                        <a href="../../index.html" style="
+                           color: white;
+                           text-decoration: none;
+                           background-color: #666;
+                           ">Carlos García Cachón</a>
+                        IES LOS SAUCES 2023-24
+                    </address>
+                </div>
+                <div class="footer-item">
+                    <a href="../indexProyectoTema7.html" style="color: white; text-decoration: none; background-color: #666">
+                        Inicio</a>
+                </div>
+                <div class="footer-item">
+                    <a href="https://github.com/Fighter-kun/214DWECProyectoTema7" target="_blank"><img
+                            src="../webroot/media/images/github.png" alt="LogoGitHub" class="pe-5" /></a>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    </body>
+
+</html>

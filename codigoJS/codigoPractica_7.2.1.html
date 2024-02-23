@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<!--
+        Descripción: CodigoEjercicio7.2.1
+        Autor: Carlos García Cachón
+        Fecha de creación/modificación: 30/01/2024
+-->
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="Carlos García Cachón" />
+        <meta name="description" content="CodigoEjercicio7.2" />
+        <meta name="keywords" content="CodigoEjercicio, 7.2" />
+        <meta name="generator" content="Apache NetBeans IDE 19" />
+        <meta name="generator" content="60" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Carlos García Cachón</title>
+        <link rel="icon" type="image/jpg" href="../webroot/media/images/favicon.ico" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+        <link rel="stylesheet" href="../webroot/css/style.css" />
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #f4f4f4;
+            }
+    
+            form {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                width: 300px;
+            }
+    
+            input[type="text"] {
+                width: 92%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 2px solid red;
+                border-radius: 5px;
+            }
+    
+            input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background-color: #ccc;
+                color: #fff;
+                cursor: pointer;
+            }
+    
+            .error {
+                color: red;
+                font-size: 0.8em;
+                margin-top: -10px;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header class="text-center">
+            <h1>
+                1. Crea un formulario que permita escribir un nombre, apellidos, email y un NIF, con una estética similar a la de la siguiente imagen: 
+                <!-- Inicialmente los cuadros de entrada de texto poseerán un borde rojo para indicar que el contenido aún no es válido. 
+                El nombre y apellidos se consideran válidos si al menos hay dos letras. 
+                El email si hay un símbolo de @ y a su izquierda y derecha al menos una letra. 
+                Se hacen las validaciones a medida que vamos escribiendo, con cada tecla pulsada. 
+                La validación del NIF utiliza un servicio alojado en un servidor. 
+                El botón de comprobar permanece desactivado hasta que todos los cuadros de texto sean válidos. 
+                Cuando lo sean el botón se activa. Al hacer clic en el botón comprobar, simplemente aparecerá un mensaje indicando que todo es correcto. 
+                Al hacer clic en el mensaje comenzamos de nuevo.  -->
+            </h1>
+        </header>
+        <main>
+            <form id="myForm">
+                <input type="text" id="nombre" placeholder="Nombre">
+                <div class="error" id="errorNombre"></div>
+                <input type="text" id="apellidos" placeholder="Apellidos">
+                <div class="error" id="errorApellidos"></div>
+                <input type="text" id="email" placeholder="Email">
+                <div class="error" id="errorEmail"></div>
+                <input type="text" id="nif" placeholder="NIF">
+                <div class="error" id="errorNIF"></div>
+                <input type="submit" value="Enviar" id="submitButton" disabled>
+            </form>
+        
+            <script>
+                const nombreInput = document.getElementById('nombre');
+                const apellidosInput = document.getElementById('apellidos');
+                const emailInput = document.getElementById('email');
+                const nifInput = document.getElementById('nif');
+                const submitButton = document.getElementById('submitButton');
+                const errorNombre = document.getElementById('errorNombre');
+                const errorApellidos = document.getElementById('errorApellidos');
+                const errorEmail = document.getElementById('errorEmail');
+                const errorNIF = document.getElementById('errorNIF');
+        
+                function validarNombre() {
+                    if (nombreInput.value.length >= 2) {
+                        nombreInput.style.border = '2px solid green';
+                        errorNombre.textContent = '';
+                        return true;
+                    } else {
+                        nombreInput.style.border = '2px solid red';
+                        errorNombre.textContent = 'El nombre debe tener al menos dos letras.';
+                        return false;
+                    }
+                }
+        
+                function validarApellidos() {
+                    if (apellidosInput.value.length >= 2) {
+                        apellidosInput.style.border = '2px solid green';
+                        errorApellidos.textContent = '';
+                        return true;
+                    } else {
+                        apellidosInput.style.border = '2px solid red';
+                        errorApellidos.textContent = 'Los apellidos deben tener al menos dos letras.';
+                        return false;
+                    }
+                }
+        
+                function validarEmail() {
+                    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (regex.test(emailInput.value)) {
+                        emailInput.style.border = '2px solid green';
+                        errorEmail.textContent = '';
+                        return true;
+                    } else {
+                        emailInput.style.border = '2px solid red';
+                        errorEmail.textContent = 'El email no es válido.';
+                        return false;
+                    }
+                }
+        
+                function validarNIF() {
+                    nifInput.style.border = '2px solid green';
+                    return true;
+                }
+        
+                nombreInput.addEventListener('input', validarNombre);
+                apellidosInput.addEventListener('input', validarApellidos);
+                emailInput.addEventListener('input', validarEmail);
+                nifInput.addEventListener('input', validarNIF);
+        
+                function habilitarBoton() {
+                    if (nombreInput.style.border === '2px solid green' &&
+                        apellidosInput.style.border === '2px solid green' &&
+                        emailInput.style.border === '2px solid green' &&
+                        nifInput.style.border === '2px solid green') {
+                        submitButton.disabled = false;
+                        submitButton.style.backgroundColor = '#4caf50'; // Cambia el color de fondo a verde si todo es válido
+                    } else {
+                        submitButton.disabled = true;
+                        submitButton.style.backgroundColor = '#ccc'; // Vuelve al color original si algún campo no es válido
+                    }
+                }
+        
+                nombreInput.addEventListener('input', habilitarBoton);
+                apellidosInput.addEventListener('input', habilitarBoton);
+                emailInput.addEventListener('input', habilitarBoton);
+                nifInput.addEventListener('input', habilitarBoton);
+        
+        
+        
+                submitButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('¡Todo es correcto!');
+                });
+            </script>
+        </main>
+
+        <footer class="position-fixed bottom-0 end-0">
+            <div class="row text-center">
+                <div class="footer-item">
+                    <address>
+                        ©
+                        <a href="../../index.html" style="
+                           color: white;
+                           text-decoration: none;
+                           background-color: #666;
+                           ">Carlos García Cachón</a>
+                        IES LOS SAUCES 2023-24
+                    </address>
+                </div>
+                <div class="footer-item">
+                    <a href="../indexProyectoTema7.html" style="color: white; text-decoration: none; background-color: #666">
+                        Inicio</a>
+                </div>
+                <div class="footer-item">
+                    <a href="https://github.com/Fighter-kun/214DWECProyectoTema7" target="_blank"><img
+                            src="../webroot/media/images/github.png" alt="LogoGitHub" class="pe-5" /></a>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    </body>
+
+</html>
