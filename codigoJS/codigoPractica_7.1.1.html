@@ -60,7 +60,7 @@
       <div class="row">
         <div class="col text-center">
           <label for="fileName">Nombre del archivo:</label>
-          <input type="text" id="fileName" placeholder="Escribe el nombre del archivo">
+          <input type="text" id="fileName" placeholder="animales">
           <button onclick="cargarTexto()">Cargar texto</button>
 
           <div id="textContainer">
@@ -74,7 +74,7 @@
               var textContainer = document.getElementById("textContainer");
               var textContent = document.getElementById("textContent");
 
-              fetch(`http://daw214.isauces.local/tmp/${fileName}.json`)
+              fetch(`https://daw214.ieslossauces.es/214DWECProyectoTema7/tmp/${fileName}.json`)
                 .then(response => {
                   if (!response.ok) {
                     throw new Error("Archivo no encontrado");
