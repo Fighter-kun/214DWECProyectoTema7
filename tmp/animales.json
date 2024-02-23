@@ -1,0 +1,110 @@
+[
+    {
+        "T06_CodAnimal": "A01",
+        "T06_DescAnimal": "Vaca ",
+        "T06_FechaNacimiento": "2023-01-15 10:30:00",
+        "T06_Sexo": "hembra",
+        "T06_Raza": "Holstein",
+        "T06_Precio": "1200.50",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A02",
+        "T06_DescAnimal": "Cerdo",
+        "T06_FechaNacimiento": "2022-08-05 15:45:00",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Large Black",
+        "T06_Precio": "800.75",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A03",
+        "T06_DescAnimal": "Gallina",
+        "T06_FechaNacimiento": "2021-05-20 08:00:00",
+        "T06_Sexo": "hembra",
+        "T06_Raza": "Rhode Island Red",
+        "T06_Precio": "25.99",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A04",
+        "T06_DescAnimal": "Cabra",
+        "T06_FechaNacimiento": "2023-03-12 12:15:00",
+        "T06_Sexo": "hembra",
+        "T06_Raza": "Saanen",
+        "T06_Precio": "500.00",
+        "T06_FechaBaja": "2024-02-20 10:33:56"
+    },
+    {
+        "T06_CodAnimal": "A05",
+        "T06_DescAnimal": "Caballo",
+        "T06_FechaNacimiento": "2022-11-30 18:30:00",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Thoroughbred",
+        "T06_Precio": "2500.25",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A06",
+        "T06_DescAnimal": "Oveja",
+        "T06_FechaNacimiento": "2022-02-28 09:45:00",
+        "T06_Sexo": "hembra",
+        "T06_Raza": "Dorset Horn",
+        "T06_Precio": "700.99",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A07",
+        "T06_DescAnimal": "Pato",
+        "T06_FechaNacimiento": "2022-07-10 16:00:00",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Pekin",
+        "T06_Precio": "35.50",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A08",
+        "T06_DescAnimal": "Burro",
+        "T06_FechaNacimiento": "2021-12-05 11:20:00",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Miniature",
+        "T06_Precio": "1200.00",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A09",
+        "T06_DescAnimal": "Conejo",
+        "T06_FechaNacimiento": "2023-04-18 14:00:00",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Holland Lop",
+        "T06_Precio": "50.00",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A10",
+        "T06_DescAnimal": "Perro",
+        "T06_FechaNacimiento": "2022-09-22 20:10:00",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Golden Retriever",
+        "T06_Precio": "1200.00",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A11",
+        "T06_DescAnimal": "Toro",
+        "T06_FechaNacimiento": "2024-02-16 00:00:00",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Lidia",
+        "T06_Precio": "50000.23",
+        "T06_FechaBaja": null
+    },
+    {
+        "T06_CodAnimal": "A12",
+        "T06_DescAnimal": "Cordero",
+        "T06_FechaNacimiento": "2024-02-16 12:12:33",
+        "T06_Sexo": "macho",
+        "T06_Raza": "Merino",
+        "T06_Precio": "50000.23",
+        "T06_FechaBaja": null
+    }
+]

@@ -37,24 +37,26 @@
                     <div class="col text-center">
                         <button id="cargarCatalogo">Cargar catálogo</button>
                         <select id="filtro">
-                            <option value="titulo_artista">Título y Artista</option>
                             <option value="pais">País</option>
                             <option value="discografica">Discográfica</option>
-                            <option value="pais_ano">País y Año</option>
+                            <option value="año">Año</option>
                         </select>
                         <table id="tablaCatalogo">
-                            <!-- La tabla se llenará dinámicamente con JavaScript -->
                         </table>
                     </div>
                 </div>
             </div>
             <script>
                 let xmlDoc; // Variable global para almacenar el documento XML
-                document.getElementById("cargarCatalogo").addEventListener("click", cargarCatalogo);
+                let columnasAgregadas = []; // Array para almacenar las columnas ya agregadas
+
+                document
+                        .getElementById("cargarCatalogo")
+                        .addEventListener("click", cargarCatalogo);
 
                 function cargarCatalogo() {
                     // Lógica para cargar el catálogo desde el documento XML en el servidor
-                    fetch("http://daw214.isauces.local/214DWECProyectoTema7/tmp/catalogo.xml")
+                    fetch("https://daw214.ieslossauces.es/214DWECProyectoTema7/tmp/catalogo.xml")
                             .then((response) => response.text())
                             .then((data) => {
                                 xmlDoc = new DOMParser().parseFromString(data, "text/xml");
@@ -63,8 +65,13 @@
                 }
 
                 function procesarCatalogo() {
+                    //vaciar el array columnasAgregadas
+                    columnasAgregadas = [];
                     const discos = xmlDoc.getElementsByTagName("CD");
                     const tabla = document.getElementById("tablaCatalogo");
+
+                    // Limpiar la tabla antes de llenarla
+                    tabla.innerHTML = "";
 
                     // Crear encabezados iniciales
                     const encabezado = tabla.createTHead();
@@ -83,7 +90,9 @@
                 }
 
                 // Agregar listener para el cambio en el desplegable
-                document.getElementById("filtro").addEventListener("change", agregarColumna);
+                document
+                        .getElementById("filtro")
+                        .addEventListener("change", agregarColumna);
 
                 function agregarColumna() {
                     if (!xmlDoc) {
@@ -93,7 +102,13 @@
 
                     const filtroSeleccionado = document.getElementById("filtro").value;
 
-                    // Verificar la opción seleccionada y agregar la columna correspondiente
+                    // Verificar si la columna ya ha sido agregada
+                    if (columnasAgregadas.includes(filtroSeleccionado)) {
+                        console.log(`La columna ${filtroSeleccionado} ya ha sido agregada.`);
+                        return;
+                    }
+
+                    // Agregar la columna
                     switch (filtroSeleccionado) {
                         case "pais":
                             agregarColumnaDesdeXML("COUNTRY", "País");
@@ -101,66 +116,40 @@
                         case "discografica":
                             agregarColumnaDesdeXML("COMPANY", "Discográfica");
                             break;
-                        case "pais_ano":
+                        case "año":
                             agregarColumnaDesdeXML("YEAR", "Año");
                             break;
                         default:
                             break;
                     }
+
+                    // Registrar la columna agregada
+                    columnasAgregadas.push(filtroSeleccionado);
                 }
 
                 function agregarColumnaDesdeXML(tag, nombreColumna) {
                     const tabla = document.getElementById("tablaCatalogo");
 
-                    if (!tabla) {
-                        console.error("Error: No se puede encontrar la tablaCatalogo.");
+                    // Obtener todos los nodos de CD
+                    const discos = xmlDoc.getElementsByTagName("CD");
+
+                    // Verificar que haya discos antes de intentar acceder a ellos
+                    if (!discos || discos.length === 0) {
+                        console.error("Error: No se encontraron discos.");
                         return;
                     }
 
+                    // Agregar la nueva columna al encabezado
                     const encabezado = tabla.tHead;
-                    const filas = tabla.rows;
+                    const nuevaColumna = encabezado.rows[0].insertCell(-1);
+                    nuevaColumna.textContent = nombreColumna;
 
-                    // Verificar si la columna ya existe
-                    let columnasExistentes = new Set(Array.from(encabezado.rows[0].cells).map(cell => cell.textContent));
-
-                    if (!columnasExistentes.has(nombreColumna)) {
-                        // Si no existe, agregar la nueva columna al encabezado
-                        const nuevaColumna = encabezado.rows[0].insertCell(-1);
-                        nuevaColumna.textContent = nombreColumna;
-
-                        // Marcar la columna como existente para evitar repeticiones
-                        columnasExistentes.add(nombreColumna);
-
-                        // Llenar la columna existente con datos desde el XML
-                        const discos = xmlDoc.getElementsByTagName("CD");
-                        for (let i = 0; i < discos.length; i++) {
-                            // Crear una nueva fila si aún no existe para esta posición
-                            let fila = filas[i + 1];
-                            if (!fila) {
-                                fila = tabla.insertRow();
-                            }
-
-                            const valor = discos[i].getElementsByTagName(tag)[0].textContent;
-
-                            // Verificar si la celda ya existe en la fila actual
-                            let celdaExistente = fila.cells[columnasExistentes.size - 1];
-
-                            if (!celdaExistente) {
-                                // Si no existe, agregar una nueva celda a la fila
-                                celdaExistente = fila.insertCell(-1);
-                            }
-
-                            // Actualizar el contenido de la celda
-                            celdaExistente.textContent = valor;
-                        }
-
-                        console.log(`Columna ${nombreColumna} agregada correctamente.`);
-                    } else {
-                        console.log(`Columna ${nombreColumna} ya existe en la tabla.`);
+                    // Llenar la nueva columna con datos desde el XML
+                    for (let i = 0; i < discos.length; i++) {
+                        const valor = discos[i].getElementsByTagName(tag)[0].textContent;
+                        tabla.rows[i + 1].insertCell(-1).textContent = valor;
                     }
                 }
-
-
             </script>
         </main>
         <footer class="position-fixed bottom-0 end-0">
